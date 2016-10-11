@@ -1,0 +1,48 @@
+# This is a code for IPython notebook and anaconda users.
+# How to use world population data on The World Bank Database.
+# http://data.worldbank.org/indicator/SP.POP.TOTL?end=2015&name_desc=false&start=1960&view=chart
+# You need to save it on "data" folder on jupyter. Here, the name of the file is "poprlationCR.csv"
+
+"Simple Plot"
+
+import numpy as np
+import pandas as pd
+import scipy.stats as st
+import matplotlib.pyplot as plt
+%matplotlib inline
+
+dfpp = pd.read_csv("data/populationCR.csv")
+
+# You can change the country's name ("New Zealand") into what you need.
+
+plt.plot_date(dfpp['Year'], dfpp['New Zealand'],
+                             alpha = .25, lw =0)
+plt.xlabel('Year')
+plt.ylabel('Population in New Zealand')
+
+"Linear Fit"
+
+from scipy.optimize import curve_fit
+import numpy as np
+
+import seaborn as sns
+import matplotlib.pyplot as plt
+
+list_linear_x = dfpp['Year']
+
+array_error = np.random.normal(size=len(list_linear_x))
+
+array_x = dfpp['Year']
+array_y = dfpp['New Zealand']+ array_error 
+
+sns.pointplot(x=array_x, y=array_y, join=False)
+
+def linear_fit(x, a, b):
+    return a*x + b
+
+param, cov = curve_fit(linear_fit, array_x, array_y)
+
+array_y_fit = param[0] * array_x + param[1]
+
+sns.pointplot(x=array_x, y=array_y, join=False)
+sns.pointplot(x=array_x, y=array_y_fit, markers="")
